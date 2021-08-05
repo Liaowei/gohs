@@ -562,6 +562,8 @@ func hsSerializeDatabase(db hsDatabase) ([]byte, error) {
 		return nil, HsError(ret)
 	}
 
+	defer C.free(unsafe.Pointer(data))
+
 	return C.GoBytes(unsafe.Pointer(data), C.int(length)), nil
 }
 
@@ -632,6 +634,8 @@ func hsDatabaseInfo(db hsDatabase) (string, error) {
 		return "", HsError(ret)
 	}
 
+	defer C.free(unsafe.Pointer(info))
+
 	return C.GoString(info), nil
 }
 
@@ -645,6 +649,8 @@ func hsSerializedDatabaseInfo(data []byte) (string, error) {
 	if ret != C.HS_SUCCESS {
 		return "", HsError(ret)
 	}
+
+	defer C.free(unsafe.Pointer(info))
 
 	return C.GoString(info), nil
 }
